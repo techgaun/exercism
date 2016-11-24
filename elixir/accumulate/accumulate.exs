@@ -18,6 +18,10 @@ defmodule Accumulate do
   @spec accumulate(list, (any -> any)) :: list
   def accumulate(list, fun) do
     list
-    |> Enum.map(fun)
+    |> accumulate(fun, [])
+  end
+  defp accumulate([], _, acc), do: acc
+  defp accumulate([h | t], fun, acc) do
+    accumulate(t, fun, acc ++ [fun.(h)])
   end
 end
