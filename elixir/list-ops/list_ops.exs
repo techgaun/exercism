@@ -9,7 +9,7 @@ defmodule ListOps do
   @spec count(list) :: non_neg_integer
   def count(l), do: do_count(l, 0)
   defp do_count([], cnt), do: cnt
-  defp do_count([h | t], cnt), do: do_count(t, cnt + 1)
+  defp do_count([_h | t], cnt), do: do_count(t, cnt + 1)
 
   @spec reverse(list) :: list
   def reverse(l), do: do_reverse(l, [])
@@ -31,17 +31,19 @@ defmodule ListOps do
 
   @type acc :: any
   @spec reduce(list, acc, ((any, acc) -> acc)) :: acc
-  def reduce(l, acc, f) do
-
-  end
+  def reduce(l, acc, f), do: do_reduce(l, acc, f)
+  defp do_reduce([], acc, _), do: acc
+  defp do_reduce([h | t], acc, f), do: do_reduce(t, f.(h, acc), f)
 
   @spec append(list, list) :: list
-  def append(a, b) do
-
-  end
+  def append(a, b), do: do_append(reverse(a), b) |> reverse
+  defp do_append(a, []), do: a
+  defp do_append(a, [h | t]), do: do_append([h | a], t)
 
   @spec concat([[any]]) :: [any]
-  def concat(ll) do
-
-  end
+  def concat(ll), do: do_concat(ll, []) |> reverse
+  defp do_concat([], acc), do: acc
+  defp do_concat([[] | t], acc), do: do_concat(t, acc)
+  defp do_concat([[hi | ti] | t], acc), do: do_concat(t, do_concat(ti, [hi | acc]))
+  defp do_concat([h | t], acc), do: do_concat(t, [h | acc])
 end
