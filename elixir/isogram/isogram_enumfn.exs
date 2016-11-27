@@ -8,15 +8,8 @@ defmodule Isogram do
       |> String.replace([" ", "-"], "")
     cleaned
     |> String.graphemes
-    |> _isogram?(%{})
-  end
-
-  def _isogram?([], _), do: true
-  def _isogram?([h | t], acc) do
-    case acc do
-      %{^h => true} -> false
-      _ ->
-        _isogram?(t, Map.put(acc, h, true))
-    end
+    |> Enum.uniq
+    |> Enum.count
+    |> Kernel.===(String.length(cleaned))
   end
 end
